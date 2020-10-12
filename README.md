@@ -12,6 +12,7 @@ and can be edited directly into the code.
 
 http://www.me.bf/en/annonces-legales
 
+location: ./bf-companies-me.bf
 
 ## WHAT NEXT ?
 
