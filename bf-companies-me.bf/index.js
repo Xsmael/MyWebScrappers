@@ -15,6 +15,7 @@ worksheet.columns = [
     { header: 'CAPITAL', key: 'CAPITAL' },
     { header: 'SIEGE', key: 'SIEGE' },
     { header: 'FORME', key: 'FORME' },
+    { header: 'SECTEUR', key: 'SECTEUR' },
     { header: 'OBJET', key: 'OBJET' }
   ];
 
@@ -62,6 +63,10 @@ var startTime= Date.now();
                     for( let param of params) {
                     if(line.trim().toLowerCase().startsWith(param.toLowerCase()) ) {
                         dataObj[param]= dataObj[param] || (line.split(':')[1] || "").trim();
+
+                        if(param == 'OBJET') {
+                            dataObj['SECTEUR']= dataObj['SECTEUR'] || (line.split(':')[2] || "").trim();
+                        }
                         if(param == 'CAPITAL') {
                             dataObj[param] = getDigits(dataObj[param]);
                         }
@@ -83,13 +88,16 @@ var startTime= Date.now();
     var endTime= Date.now();  
     var timeElapsed= ((endTime-startTime)/1000) /60 ; // in minutes
     worksheet.addRow({
-        'DENOMINATION':"Généré  le "+ strDate+ " en " +timeElapsed+" minutes\n "+k+" pages traitées"
+        'DENOMINATION':"Generated on "+ strDate+ " in " +timeElapsed.toFixed(2)+" minutes\n "+k+" pages processed"
+    });
+    worksheet.addRow({
+        'DENOMINATION':"THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED OR IMPLIED.  ANY USE IS AT YOUR OWN RISK."
     });
     await workbook.xlsx.writeFile(fileName);
     console.log("JOB FREAKIN DONE !");
     console.log("started at "+ Date(startTime));
     console.log("ended   at "+ Date(endTime));
-    console.log(k+" pages parsed in"+ timeElapsed +" min.");
-    console.log("That is "+ (timeElapsed*60/k) + " seconds per page");
+    console.log(k+" pages parsed in "+ timeElapsed.toFixed(2) +" min.");
+    console.log("That is "+ (timeElapsed*60/k).toFixed(2) + " seconds per page");
     
 })();
